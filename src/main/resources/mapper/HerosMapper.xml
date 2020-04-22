@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="com.zyl.mapper.HerosMapper">
+    	<!-- 查询,分页 ,条件查询-->
+    	<select id="selectAll" parameterType="map" resultType="com.zyl.beans.Heros">
+    		select h.*,c.cname from t_heros h join t_camp c on h.cid=c.cid
+    		<where>
+    			<if test="cid!=null">
+    				c.cid=#{cid}
+    			</if>
+    			<if test="price!=null and price != ''">
+    				and beginPrice=#{price}
+    			</if>
+    			<if test="price!=null and price != ''">
+    				and endPrice=#{price}
+    			</if>
+    			<if test="status!=null">
+    				and status=#{status}
+    			</if>
+    		</where>
+    	</select>
+    	
+    	<!-- 查询所有的阵营 -->
+    	<select id="selectCamp" resultType="com.zyl.beans.Camp">
+    		select * from t_camp;
+    	</select>
+    	
+    	<!-- 添加 -->
+    	<insert id="insertHeros" parameterType="com.zyl.beans.Heros">
+    		insert into t_heros(hname,price,cid,status)
+    		values(#{hname},#{price},#{cid},#{status})
+    	</insert>
+    	
+    	<!-- 根据id查询一条回显数据 -->
+    	<select id="selectOne" resultType="com.zyl.beans.Heros">
+    		select h.*,c.cname from t_heros h join t_camp c on h.cid=c.cid
+    		 <where>
+    		 	hid=#{hid}
+    		 </where>
+    	</select>
+    	
+    	<!-- 购买 -->
+    	<update id="updateHeros" parameterType="com.zyl.beans.Heros">
+    		update t_heros
+    		<set>
+    			<if test="status!=null">
+    				status=1,
+    			</if>
+    			<if test="hname!=null and hname!=''">
+    				hname=#{hname},
+    			</if>
+    		</set>
+    		<where>
+    			hid=#{hid}
+    		</where>
+    	</update>
+    	
+    	<!-- 详情 -->
+    	<select id="selectHerosOne" resultType="com.zyl.beans.Heros">
+    		select * from t_heros
+    		<where>
+    			hid=#{hid}
+    		</where>
+    	</select>
+    </mapper>
